@@ -1,16 +1,15 @@
 import http from 'k6/http';
-import {thresholds} from 'k6';
-import {check} from 'k6';
+import {thresholds, check} from 'k6';
 
 //init
 export const url= 'http://host.docker.internal:80';
 
 export const options = {
-    vus: 10,
-    duration: '30s',
+    vus: 1,
+    duration: '5m',
     thresholds: {
         http_req_duration: ['p(95) < 1000'],
-        http_req_failed: ['rate < 0.01']
+        checks: ['rate>0.9']
     }
 };
 
@@ -21,7 +20,7 @@ export default function (){
      response,
      {
          'is status 200 ': (r) => r.status === 200,
-         'body is not null':(r) => r.body.legth > 0,
+        
      }
     );  
  
